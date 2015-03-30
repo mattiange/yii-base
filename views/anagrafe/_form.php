@@ -8,8 +8,6 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="anagrafe-form">
-
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'cognome')->textInput(['maxlength' => 50]) ?>
@@ -33,10 +31,11 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'username')->textInput(['maxlength' => 50]) ?>
 
     <?= $form->field($model, 'password')->passwordInput(['maxlength' => 50]) ?>
+    
+    <!-- i campi "creato il" e "aggiornato il" sono a sola lettura -->
+    <?= $form->field($model, 'creato_il')->textInput(['readonly' => true]) ?>
 
-    <?= $form->field($model, 'creato_il')->textInput() ?>
-
-    <?= $form->field($model, 'aggiornato_il')->textInput() ?>
+    <?= $form->field($model, 'aggiornato_il')->textInput(['readonly' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
@@ -44,4 +43,4 @@ use yii\widgets\ActiveForm;
 
     <?php ActiveForm::end(); ?>
 
-</div>
+

@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "anagrafe".
@@ -22,21 +24,34 @@ use Yii;
  * @property string $creato_il
  * @property string $aggiornato_il
  */
-class Anagrafe extends \yii\db\ActiveRecord
-{
+class Anagrafe extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'anagrafe';
     }
 
     /**
      * @inheritdoc
+     * Aggiornamento automatico dei campi creato_il e agiornato_il 
      */
-    public function rules()
-    {
+    public function behaviors() {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'creato_il',
+                'updatedAtAttribute' => 'aggiornato_il',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rules() {
         return [
             [['com_residenza_id', 'com_nascita_id'], 'required'],
             [['com_residenza_id', 'com_nascita_id'], 'integer'],
@@ -50,8 +65,7 @@ class Anagrafe extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'idContatto' => 'Id Contatto',
             'cognome' => 'Cognome',
@@ -69,4 +83,5 @@ class Anagrafe extends \yii\db\ActiveRecord
             'aggiornato_il' => 'Aggiornato Il',
         ];
     }
+
 }
