@@ -8,6 +8,7 @@ use app\models\ComuniSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\Json;
 
 /**
  * ComuniController implements the CRUD actions for Comuni model.
@@ -112,24 +113,28 @@ class ComuniController extends Controller {
         }
     }
 
-    /**
-     * Metodo spartano che costruisce le <option> con l'elenco dei comuni
-     * della provincia id
-     * chiamato dall'evento on-change su provincia
-     * @param integer $id
+    /*
+     * Elenca i comuni di una provincia in un array JSON Ajax
+     * per popolare una DepDrop List 
      */
-    public function actionList($id) {
-        $comuni = Comuni::find()
-                ->where(['id_provincia' => $id])
-                ->all();
-
-        if ($comuni) {
-            foreach ($comuni as $comune) {
-                echo "<option value='" . $comune->id . "'>" . $comune->comune . "</option>";
+    public function actionComuniProvincia() {
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $cat_id = $parents[0];
+                $out = Comuni::getComuniList($cat_id);
+                // the getComuniList function will query the database based on the
+                // cat_id and return an array like below:
+                // [
+                //      ['id'=>'<sub-cat-id-1>', 'name'=>'<sub-cat-name1>'],
+                //      ['id'=>'<sub-cat_id_2>', 'name'=>'<sub-cat-name2>']
+                // ]
+                echo Json::encode(['output' => $out, 'selected' => '']);
+                return;
             }
-        } else {
-            echo "<option></option>";
         }
+        echo Json::encode(['output' => '', 'selected' => '']);
     }
 
 }

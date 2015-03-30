@@ -6,6 +6,8 @@ use yii\jui\DatePicker;
 use \yii\helpers\ArrayHelper;
 use app\models\Comuni;
 use app\models\Province;
+use yii\helpers\Url;
+use kartik\depdrop\DepDrop;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Anagrafe */
@@ -19,25 +21,27 @@ use app\models\Province;
 <?= $form->field($model, 'nome')->textInput(['maxlength' => 50]) ?>
 
 <?= $form->field($model, 'indirizzo')->textInput(['maxlength' => 50]) ?>
-<!-- Dropdown list a cascata 
-     con dati caricati da DB - Province 
-     e aggiornamento delle <option> dei comuni
--->
+
+<!-- Dropdown list a cascata con dati caricati da DB - Province -->
 <?=
 $form->field($model, 'provincia')->dropDownList(
-        ArrayHelper::map(Province::find()->orderBy('provincia')->all(), 'id', 'provincia'), 
-    [ 'prompt' => 'Scegli la provincia',
-      'onchange' => '$.post("index.php?r=comuni/list&id=' . '"+$(this).val(), 
-                 function (data) {
-                    $("select#anagrafe-com_residenza_id").html(data);
-                 });'
-    ]);
+        ArrayHelper::map(Province::find()->orderBy('provincia')->all(), 'id', 'provincia'), [
+            'id' => 'provincia-id', //id da usare nella dropbox dipendente
+            'prompt' => 'Scegli la provincia...',
+        ]
+);
 ?>
-<!-- Dropdown list con dati caricati da DB - Comuni della provincia di Bari -->
-<?=
-$form->field($model, 'com_residenza_id')->dropDownList(
-        ArrayHelper::map(Comuni::findAll(['id_provincia' => 72]), 'id', 'comune'), ['prompt' => 'Scegli il comune']
-)
+<!-- Dropdown List kartik/DepDrop con dati caricati in base alla Provincia -->
+<?php
+// Dependent Dropdown
+echo $form->field($model, 'com_residenza_id')->widget(DepDrop::classname(), [
+    'options' => ['id' => 'comune'],
+    'pluginOptions' => [
+        'depends' => ['provincia-id'], //id dropbox da cui dipende
+        'placeholder' => 'Scegli il comune...',
+        'url' => Url::to(['/comuni/comuni-provincia'])
+    ]
+]);
 ?>
 <!-- Date picker Jquery UI associato a field -->
 <?=
