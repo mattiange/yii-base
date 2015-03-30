@@ -25,7 +25,11 @@ use yii\db\Expression;
  * @property string $aggiornato_il
  */
 class Anagrafe extends \yii\db\ActiveRecord {
-
+    
+    //Utilizzata nel DropDown List a cascata (Province, comuni) nel _form.php
+    public $provincia="";
+    
+    
     /**
      * @inheritdoc
      */

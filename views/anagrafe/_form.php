@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 use yii\jui\DatePicker;
 use \yii\helpers\ArrayHelper;
 use app\models\Comuni;
+use app\models\Province;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Anagrafe */
@@ -18,12 +19,25 @@ use app\models\Comuni;
 <?= $form->field($model, 'nome')->textInput(['maxlength' => 50]) ?>
 
 <?= $form->field($model, 'indirizzo')->textInput(['maxlength' => 50]) ?>
-
+<!-- Dropdown list a cascata 
+     con dati caricati da DB - Province 
+     e aggiornamento delle <option> dei comuni
+-->
+<?=
+$form->field($model, 'provincia')->dropDownList(
+        ArrayHelper::map(Province::find()->orderBy('provincia')->all(), 'id', 'provincia'), 
+    [ 'prompt' => 'Scegli la provincia',
+      'onchange' => '$.post("index.php?r=comuni/list&id=' . '"+$(this).val(), 
+                 function (data) {
+                    $("select#anagrafe-com_residenza_id").html(data);
+                 });'
+    ]);
+?>
 <!-- Dropdown list con dati caricati da DB - Comuni della provincia di Bari -->
-<?= $form->field($model, 'com_residenza_id')->dropDownList(
-        ArrayHelper::map(Comuni::findAll(['id_provincia'=>72]),'id','comune'),
-        ['prompt'=>'Scegli il comune']
-        )
+<?=
+$form->field($model, 'com_residenza_id')->dropDownList(
+        ArrayHelper::map(Comuni::findAll(['id_provincia' => 72]), 'id', 'comune'), ['prompt' => 'Scegli il comune']
+)
 ?>
 <!-- Date picker Jquery UI associato a field -->
 <?=
