@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\jui\DatePicker;
+use \yii\helpers\ArrayHelper;
+use app\models\Comuni;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Anagrafe */
@@ -17,8 +19,12 @@ use yii\jui\DatePicker;
 
 <?= $form->field($model, 'indirizzo')->textInput(['maxlength' => 50]) ?>
 
-<?= $form->field($model, 'com_residenza_id')->textInput() ?>
-
+<!-- Dropdown list con dati caricati da DB - Comuni della provincia di Bari -->
+<?= $form->field($model, 'com_residenza_id')->dropDownList(
+        ArrayHelper::map(Comuni::findAll(['id_provincia'=>72]),'id','comune'),
+        ['prompt'=>'Scegli il comune']
+        )
+?>
 <!-- Date picker Jquery UI associato a field -->
 <?=
 $form->field($model, 'data_nascita')->widget(DatePicker::classname(), [
