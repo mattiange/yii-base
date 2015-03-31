@@ -9,7 +9,6 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="province-form">
-
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'id')->textInput() ?>

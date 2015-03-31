@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use yii\helpers\Url;
+use yii\bootstrap\Modal;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ProvinceSearch */
@@ -17,9 +19,21 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Province', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::button('Create Province', ['value'=>Url::to('index.php?r=province/create'), 'class' => 'btn btn-success','id'=>'modalButton']) ?>
     </p>
-
+    
+    <?php
+    Modal::begin([
+            'header'=>'<h4>Province</h4>',
+            'id' => 'modal',
+            'size'=>'modal-lg', //classe bootstrap
+        ]);
+ 
+    echo "<div id='modalContent'></div>";
+ 
+    Modal::end();
+    ?>
+    
     <?php
     /*
      * Con la classe Pjax gli aggiornamenti sulla griglia saranno fatti
