@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ProvinceSearch */
@@ -19,7 +20,13 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Create Province', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?= GridView::widget([
+    <?php
+    /*
+     * Con la classe Pjax gli aggiornamenti sulla griglia saranno fatti
+     * vi AJAX senza ricaricare la pagina
+     */
+    Pjax::begin();
+    echo GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
@@ -32,6 +39,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
-    ]); ?>
+    ]); 
+    Pjax::end();
+    ?>
 
 </div>
