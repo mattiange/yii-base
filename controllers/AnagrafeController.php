@@ -63,7 +63,9 @@ class AnagrafeController extends Controller
         $model = new Anagrafe();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', 'Il nuovo utente è stato registrato correttamente');
             return $this->redirect(['view', 'id' => $model->idContatto]);
+            
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -82,6 +84,11 @@ class AnagrafeController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            //messaggi FLASH esempi
+            Yii::$app->session->addFlash('success', 'Il nuovo utente è stato aggiornato correttamente');               
+            Yii::$app->session->addFlash('warning', 'Non ha ancora registrato il programma');
+            Yii::$app->session->addFlash('danger', 'smetterà di funzionare tra 10gg');
+            Yii::$app->session->addFlash('info', 'sto scherzando :-)');
             return $this->redirect(['view', 'id' => $model->idContatto]);
         } else {
             return $this->render('update', [
