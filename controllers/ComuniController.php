@@ -117,6 +117,7 @@ class ComuniController extends Controller {
      * Elenca i comuni di una provincia in un array JSON Ajax
      * per popolare una DepDrop List 
      */
+
     public function actionComuniProvincia() {
         $out = [];
         if (isset($_POST['depdrop_parents'])) {
@@ -135,6 +136,26 @@ class ComuniController extends Controller {
             }
         }
         echo Json::encode(['output' => '', 'selected' => '']);
+    }
+
+    /**
+     * Restituisce un eleco di comuni da DB in base alla digitazione
+     * in un campo Select2
+     * 
+     * @param type $search
+     * @param type $id
+     */
+    public function actionComuniList($search = null, $id = null) {
+        $out = ['more' => false];
+        if (!is_null($search)) {
+            $data = Comuni::ComuniListBySearch($search);
+            $out['results'] = array_values($data);
+        } elseif ($id > 0) {
+            $out['results'] = ['id' => $id, 'text' => City::find($id)->name];
+        } else {
+            $out['results'] = ['id' => 0, 'text' => 'Nessun risultato'];
+        }
+        echo Json::encode($out);
     }
 
 }

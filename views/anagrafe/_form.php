@@ -8,6 +8,8 @@ use app\models\Comuni;
 use app\models\Province;
 use yii\helpers\Url;
 use kartik\depdrop\DepDrop;
+use kartik\select2\Select2;
+use yii\web\JsExpression;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Anagrafe */
@@ -26,8 +28,8 @@ use kartik\depdrop\DepDrop;
 <?=
 $form->field($model, 'provincia')->dropDownList(
         ArrayHelper::map(Province::find()->orderBy('provincia')->all(), 'id', 'provincia'), [
-            'id' => 'provincia-id', //id da usare nella dropbox dipendente
-            'prompt' => 'Scegli la provincia...',
+    'id' => 'provincia-id', //id da usare nella dropbox dipendente
+    'prompt' => 'Scegli la provincia...',
         ]
 );
 ?>
@@ -51,7 +53,40 @@ $form->field($model, 'data_nascita')->widget(DatePicker::classname(), [
 ])
 ?>
 
-<?= $form->field($model, 'com_nascita_id')->textInput() ?>
+<!-- Select2 Kartik with Ajax su comune di nascita -->
+<?php
+// The controller action that will render the list
+$url = Url::to(['/comuni/comuni-list']);
+
+// Script to initialize the selection based on the value of the select2 element
+$initScript = <<< SCRIPT
+function (element, callback) {
+    var id=\$(element).val();
+    if (id !== "") {
+        \$.ajax("{$url}?id=" + id, {
+            dataType: "json"
+        }).done(function(data) { callback(data.results);});
+    }
+}
+SCRIPT;
+
+// The widget
+echo $form->field($model, 'com_nascita_id')->widget(Select2::classname(), [
+    'language'=>'it',
+    'options' => ['placeholder' => 'Cerca un comune ...'],
+    'pluginOptions' => [
+        'allowClear' => true,
+        'minimumInputLength' => 3,
+        'ajax' => [
+            'url' => $url,
+            'dataType' => 'json',
+            'data' => new JsExpression('function(term,page) { return {search:term}; }'),
+            'results' => new JsExpression('function(data,page) { return {results:data.results}; }'),
+        ],
+        'initSelection' => new JsExpression($initScript)
+    ],
+]);
+?>
 
 <?= $form->field($model, 'email')->textInput(['maxlength' => 30]) ?>
 
