@@ -47,7 +47,7 @@ class Comuni extends \yii\db\ActiveRecord {
 
     /**
      * Restituisce un array con l'elenco dei comuni per provincia
-     * utilizzato dalla actionComuniProvincia() per popolare una DropDep List 
+     * utilizzato dalla actionComuniProvincia() per popolare una DepDrop List 
      *                 
      * [
      *      ['id'=>'<sub-cat-id-1>', 'name'=>'<sub-cat-name1>'],

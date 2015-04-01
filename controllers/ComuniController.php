@@ -151,7 +151,7 @@ class ComuniController extends Controller {
             $data = Comuni::ComuniListBySearch($search);
             $out['results'] = array_values($data);
         } elseif ($id > 0) {
-            $out['results'] = ['id' => $id, 'text' => City::find($id)->name];
+            $out['results'] = ['id' => $id, 'text' => Comuni::find($id)->name];
         } else {
             $out['results'] = ['id' => 0, 'text' => 'Nessun risultato'];
         }

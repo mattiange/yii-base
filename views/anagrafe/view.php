@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
  * Yii::$app->session->setFlash('success', 'Il nuovo utente è stato aggiornato correttamente');
  * 
  * Più messaggi
- * Yii::$app->session->setFlash('success', 'Per ora ho aggiornato');
+ * Yii::$app->session->addFlash('success', 'Per ora ho aggiornato');
  * Yii::$app->session->addFlash('warning', 'Non ha ancora registrato il programma');
  * Yii::$app->session->addFlash('danger', 'smetterà di funzionare tra 10gg');
  * Yii::$app->session->addFlash('info', 'sto scherzando :-)');
